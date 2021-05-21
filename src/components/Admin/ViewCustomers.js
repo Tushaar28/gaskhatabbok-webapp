@@ -1,17 +1,15 @@
 import Paper from "@material-ui/core/Paper";
 import axios from "axios";
-import Moment from 'moment';
+import Moment from "moment";
 import MUIDataTable from "mui-datatables";
 import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
 
 import API_URL from "../../services/api";
 import decodeToken from "../../services/token";
 import NavbarComponent from "../shared/Navbar";
 import NotificationComponent from "../shared/Notification";
 
-const ViewCustomersComponent = (props) => {
-  const { history } = props;
+export default function ViewCustomersAdminComponent(props) {
   const [customers, setCustomers] = useState([]);
   const [openNotify, setOpenNotify] = useState(false);
   const [message, setMessage] = useState("");
@@ -27,38 +25,6 @@ const ViewCustomersComponent = (props) => {
     "Registration Date",
     "Registered by",
     "Worker Mobile Number",
-    {
-      name: "",
-      options: {
-        filter: false,
-        sort: false,
-        empty: false,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          return (
-            <Button
-              color="primary"
-              onClick={() => {
-                history.push({
-                  pathname: '/agency/home/customer/edit',
-                  state: {
-                    qr_code_id: tableMeta.rowData[0],
-                    consumer_number: tableMeta.rowData[1],
-                    agency_id: tableMeta.rowData[2],
-                    lpg_id: tableMeta.rowData[3],
-                    mobile: tableMeta.rowData[4],
-                    registration_date: tableMeta.rowData[5],
-                    registered_by: tableMeta.rowData[6],
-                    worker_mobile_number: tableMeta.rowData[7],
-                  },
-                });
-              }}
-            >
-              Edit
-            </Button>
-          );
-        },
-      },
-    },
   ];
 
   const options = {
@@ -68,10 +34,9 @@ const ViewCustomersComponent = (props) => {
   useEffect(() => {
     const requestData = (async () => {
       const token = localStorage.getItem("token");
-      if(token === null) props.history.replace('/');
-      const tempToken = decodeToken();
+      let tempToken = decodeToken();
       setDecodedToken(tempToken);
-      const url = API_URL + "/agency/view/customers";
+      const url = API_URL + "/admin/view/customers";
       const headers = {
         authorization: "Bearer " + token,
         id: tempToken["sub"],
@@ -79,6 +44,7 @@ const ViewCustomersComponent = (props) => {
       var response;
       try {
         response = await axios.get(url, { headers });
+        console.log(response);
       } catch (e) {
         setMessage("Something went wrong");
         setNotificationType("error");
@@ -95,8 +61,8 @@ const ViewCustomersComponent = (props) => {
           var element = response.data.message[i];
           var temp = [];
           for (let key in element) {
-            if(key === 'registration_date') {
-              element[key] = Moment(element[key]).format('DD-MM-YYYY');
+            if (key === "registration_date") {
+              element[key] = Moment(element[key]).format("DD-MM-YYYY");
             }
             temp.push(element[key]);
           }
@@ -135,6 +101,4 @@ const ViewCustomersComponent = (props) => {
       </div>
     );
   }
-};
-
-export default ViewCustomersComponent;
+}

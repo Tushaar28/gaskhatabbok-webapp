@@ -16,8 +16,8 @@ const AgencyHomeComponent = (props) => {
 
   return (
     <div>
-      <NavbarComponent decodedToken={decodedToken} />
-      <ViewCustomersComponent decodedToken={decodedToken} />
+      <NavbarComponent decodedToken={decodedToken} history={props.history} />
+      <h1>Home Page</h1>
     </div>
   );
 };

@@ -2,7 +2,7 @@ import { Avatar, Button, Checkbox, Paper, TextField } from "@material-ui/core";
 import { Grid } from "@material-ui/core";
 import LockedOutlinedIcon from "@material-ui/icons/LockOutlined";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import API_URL from "../../services/api";
 import decodeToken from "../../services/token";
@@ -14,6 +14,17 @@ const LoginComponent = (props) => {
   const [openNotify, setOpenNotify] = useState(false);
   const [message, setMessage] = useState("");
   const [notificationType, setNotificationType] = useState("info");
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if(token) {
+      const decodedToken = decodeToken();
+      if(decodedToken['is_admin'] === true)
+        props.history.replace('/admin/home');
+      else
+        props.history.replace('/agency/home');
+    }
+  }, []);
 
   const paperStyle = {
     padding: "30px",
