@@ -18,7 +18,6 @@ export default function ViewWorkersAdminComponent() {
   const columns = [
     "Name",
     "Mobile",
-    "Password",
     "Agency ID"
   ];
 

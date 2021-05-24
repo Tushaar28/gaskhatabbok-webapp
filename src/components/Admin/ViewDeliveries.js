@@ -19,6 +19,9 @@ export default function ViewDeliveriesAdminComponent() {
   const columns = [
     "Sr. No.",
     "QR Code",
+    "Consumer Number",
+    "LPG ID",
+    "Mobile Number",
     "Agency ID",
     "Worker Name",
     "Worker Mobile Number",
@@ -49,7 +52,7 @@ export default function ViewDeliveriesAdminComponent() {
         setOpenNotify(true);
       }
 
-      if (response.data.errorStatus) {
+      if (response.data.errorStatus === true) {
         setMessage(response.data.message);
         setNotificationType("error");
         setOpenNotify(true);

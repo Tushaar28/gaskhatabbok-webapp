@@ -19,7 +19,6 @@ export default function ViewAgenciesComponent() {
     "Agency Name",
     "Owner Name",
     "Mobile",
-    "Password",
   ];
 
   const options = {

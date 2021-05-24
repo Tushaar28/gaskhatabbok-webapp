@@ -1,6 +1,6 @@
 import Paper from "@material-ui/core/Paper";
 import axios from "axios";
-import Moment from 'moment';
+import Moment from "moment";
 import MUIDataTable from "mui-datatables";
 import React, { useEffect, useState } from "react";
 
@@ -17,13 +17,16 @@ export default function ViewDeliveriesComponent() {
   const [decodedToken, setDecodedToken] = useState([]);
 
   const columns = [
-      "Sr. No.",
-      "QR Code",
-      "Agency ID",
-      "Worker Name",
-      "Worker Mobile Number",
-      "Delivery Date",
-      "Payment Method",
+    "Sr. No.",
+    "QR Code",
+    "Consumer Number",
+    "LPG ID",
+    "Mobile Number",
+    "Agency ID",
+    "Worker Name",
+    "Worker Mobile Number",
+    "Delivery Date",
+    "Payment Method",
   ];
 
   const options = {
@@ -59,9 +62,9 @@ export default function ViewDeliveriesComponent() {
           var element = response.data.message[i];
           var temp = [];
           for (let key in element) {
-            if(key === 'delivery_date') {
-                element[key] = Moment(element[key]).format('DD-MM-YYYY');
-              }
+            if (key === "delivery_date") {
+              element[key] = Moment(element[key]).format("DD-MM-YYYY");
+            }
             temp.push(element[key]);
           }
           tempDeliveries.push(temp);

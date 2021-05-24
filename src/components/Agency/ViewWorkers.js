@@ -15,7 +15,7 @@ export default function ViewWorkersComponent() {
   const [notificationType, setNotificationType] = useState("info");
   const [decodedToken, setDecodedToken] = useState([]);
 
-  const columns = ["Name", "Mobile", "Password"];
+  const columns = ["Name", "Mobile"];
 
   const options = {
     filterType: "checkbox",

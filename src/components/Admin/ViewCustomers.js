@@ -22,6 +22,7 @@ export default function ViewCustomersAdminComponent(props) {
     "Agency ID",
     "LPG ID",
     "Mobile",
+    "Alternate Mobile Number",
     "Registration Date",
     "Registered by",
     "Worker Mobile Number",
