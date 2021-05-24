@@ -1,6 +1,12 @@
 import { Avatar, Button, Checkbox, Paper, TextField } from "@material-ui/core";
 import { Grid } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
+import Input from "@material-ui/core/Input";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import InputLabel from "@material-ui/core/InputLabel";
 import LockedOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -14,15 +20,15 @@ const LoginComponent = (props) => {
   const [openNotify, setOpenNotify] = useState(false);
   const [message, setMessage] = useState("");
   const [notificationType, setNotificationType] = useState("info");
+  const [visibility, setVisibility] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if(token) {
+    const token = localStorage.getItem("token");
+    if (token) {
       const decodedToken = decodeToken();
-      if(decodedToken['is_admin'] === true)
-        props.history.replace('/admin/home');
-      else
-        props.history.replace('/agency/home');
+      if (decodedToken["is_admin"] === true)
+        props.history.replace("/admin/home");
+      else props.history.replace("/agency/home");
     }
   }, []);
 
@@ -49,6 +55,10 @@ const LoginComponent = (props) => {
 
   const validatePassword = () => {
     return password.length >= 6 && password.length <= 15;
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
   };
 
   const submit = async (event) => {
@@ -98,40 +108,52 @@ const LoginComponent = (props) => {
               </Avatar>
               <h2>Login</h2>
             </Grid>
-            <TextField
-              label="Username"
-              placeholder="Enter username"
-              fullWidth
-              required
-              errorText={
-                !validateUsername() ? "Please enter valid username" : ""
-              }
-              value={username}
-              onChange={(e) => {
-                setUsername(e.target.value);
-                validateUsername();
-              }}
-            />
+            <span>
+              <TextField
+                label="Username"
+                placeholder="Enter username"
+                fullWidth
+                required
+                errorText={
+                  !validateUsername() ? "Please enter valid username" : ""
+                }
+                value={username}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  validateUsername();
+                }}
+              />
+            </span>
             <br />
-            <TextField
-              label="Password"
-              placeholder="Enter password"
-              type="password"
-              fullWidth
-              required
+            <InputLabel
               style={{
-                marginTop: "30px",
+                marginTop: "20px",
               }}
-              errorText={
-                !validatePassword()
-                  ? "Password must be between 6-15 characters"
-                  : ""
-              }
+              htmlFor="standard-adornment-password"
+            >
+              Password
+            </InputLabel>
+            <Input
+              id="standard-adornment-password"
+              type={visibility ? "text" : "password"}
+              placeholder="Enter password"
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
                 validatePassword();
               }}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={(e) => {
+                      setVisibility(!visibility);
+                    }}
+                  >
+                    {visibility ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              }
             />
             <Button
               variant="contained"
