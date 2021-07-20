@@ -1,4 +1,4 @@
-import { Avatar, Button, Checkbox, Paper, TextField } from "@material-ui/core";
+import { Avatar, Button, Paper, TextField } from "@material-ui/core";
 import { Grid } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Input from "@material-ui/core/Input";
@@ -14,7 +14,7 @@ import API_URL from "../../services/api";
 import decodeToken from "../../services/token";
 import NotificationComponent from "./Notification";
 
-const LoginComponent = (props) => {
+export default function LoginComponent(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [openNotify, setOpenNotify] = useState(false);
@@ -91,7 +91,7 @@ const LoginComponent = (props) => {
   };
 
   return (
-    <div>
+    <div className="row">
       <form
         style={{
           position: "absolute",
@@ -176,6 +176,4 @@ const LoginComponent = (props) => {
       />
     </div>
   );
-};
-
-export default LoginComponent;
+}

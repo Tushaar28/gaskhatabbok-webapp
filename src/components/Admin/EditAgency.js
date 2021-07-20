@@ -6,24 +6,15 @@ import decodeToken from "../../services/token";
 import NavbarComponent from "../shared/Navbar";
 import NotificationComponent from "../shared/Notification";
 
-export default function EditCustomerComponent(props) {
+export default function EditAgencyComponent(props) {
   const [decodedToken, setDecodedToken] = useState([]);
-  const [qrCodeId, setQrCodeId] = useState(props.location.state.qr_code_id);
-  const [consumerNumer, setConsumerNumber] = useState(
-    props.location.state.consumer_number
-  );
   const [agencyId, setAgencyId] = useState(props.location.state.agency_id);
-  const [lpg, setLpg] = useState(props.location.state.lpg_id);
+  const [agencyName, setAgencyName] = useState(
+    props.location.state.agency_name
+  );
+  const [ownerName, setOwnerName] = useState(props.location.state.owner_name);
   const [mobile, setMobile] = useState(props.location.state.mobile);
-  const [registationDate, setRegistrationDate] = useState(
-    props.location.state.registration_date
-  );
-  const [registeredBy, setRegisteredBy] = useState(
-    props.location.state.registered_by
-  );
-  const [workerMobile, setWorkerMobile] = useState(
-    props.location.state.worker_mobile_number
-  );
+  const [password, setPassword] = useState("");
   const [openNotify, setOpenNotify] = useState(false);
   const [message, setMessage] = useState("");
   const [notificationType, setNotificationType] = useState("info");
@@ -36,44 +27,52 @@ export default function EditCustomerComponent(props) {
   }, []);
 
   const validate = () => {
-    if (lpg.length > 0 && lpg.length !== 17) return false;
-    return mobile.length === 10;
+    return agencyName.length > 0 && ownerName.length > 0;
   };
 
   const submit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
-    const url = API_URL + "/agency/customer/edit";
+    const url = API_URL + "/admin/agency/edit";
     const headers = {
       authorization: "Bearer " + token,
       id: decodedToken["sub"],
     };
     const body = {
-      qr_code_id: qrCodeId,
+      agency_id: agencyId,
+      agency_name: agencyName,
       mobile: mobile,
-      consumer_number: consumerNumer,
-      lpg_id: lpg,
+      owner_name: ownerName,
+      password: password,
+    };
+    const body1 = {
+      agency_id: agencyId,
+      agency_name: agencyName,
+      mobile: mobile,
+      owner_name: ownerName,
     };
 
     var response;
     try {
-      response = await axios.put(url, body, { headers });
+        if (password.length > 0)
+        response = await axios.put(url, body, { headers });
+      else response = await axios.put(url, body1, { headers });
     } catch (e) {
-      setMessage("Something went wrong");
-      setNotificationType("error");
-      setOpenNotify(true);
-    }
+        setMessage("Something went wrong");
+        setNotificationType("error");
+        setOpenNotify(true);
+      }
 
-    if (response.data.errorStatus) {
+      if (response.data.errorStatus) {
         setMessage(response.data.message);
         setNotificationType("error");
         setOpenNotify(true);
       } else {
-        setMessage("Customer updated successfully");
+        setMessage("Agency updated successfully");
         setNotificationType("success");
         setOpenNotify(true);
         setTimeout(function () {
-          props.history.replace('/agency/home/view/customers');
+          props.history.replace('/admin/home');
         }, 2000);
       }
   };
@@ -88,7 +87,7 @@ export default function EditCustomerComponent(props) {
           marginBotton: "20px",
         }}
       >
-        Edit Customer
+        Edit Agency
       </h2>
       <form
         onSubmit={(e) => submit(e)}
@@ -98,73 +97,6 @@ export default function EditCustomerComponent(props) {
           marginRight: "50px",
         }}
       >
-        <div className="form-group row">
-          <label htmlFor="qr" className="col-sm-2 col-form-label">
-            QR Code ID
-          </label>
-          <div class="col-sm-10">
-            <input
-              style={{
-                width: "50%",
-              }}
-              value={qrCodeId}
-              type="text"
-              className="form-control"
-              readOnly
-            />
-          </div>
-        </div>
-        <div className="form-group row">
-          <label htmlFor="lpg" className="col-sm-2 col-form-label">
-            LPG ID
-          </label>
-          <div class="col-sm-10">
-            <input
-              style={{
-                width: "50%",
-              }}
-              value={lpg}
-              onChange={(e) => setLpg(e.target.value)}
-              type="number"
-              className="form-control"
-              placeholder="Enter LPG ID"
-            />
-          </div>
-        </div>
-        <div className="form-group row">
-          <label htmlFor="consumer" className="col-sm-2 col-form-label">
-            Consumer Number
-          </label>
-          <div class="col-sm-10">
-            <input
-              style={{
-                width: "50%",
-              }}
-              value={consumerNumer}
-              onChange={(e) => setConsumerNumber(e.target.value)}
-              type="text"
-              className="form-control"
-              placeholder="Enter consumer number"
-            />
-          </div>
-        </div>
-        <div className="form-group row">
-          <label htmlFor="inputPassword" className="col-sm-2 col-form-label">
-            Mobile
-          </label>
-          <div class="col-sm-10">
-            <input
-              style={{
-                width: "50%",
-              }}
-              value={mobile}
-              onChange={(e) => setMobile(e.target.value)}
-              type="number"
-              className="form-control"
-              placeholder="Enter mobile number"
-            />
-          </div>
-        </div>
         <div className="form-group row">
           <label htmlFor="agency_id" className="col-sm-2 col-form-label">
             Agency ID
@@ -177,61 +109,81 @@ export default function EditCustomerComponent(props) {
               value={agencyId}
               type="text"
               className="form-control"
-              readOnly
+              placeholder="Enter agency ID"
+              readonly
             />
           </div>
         </div>
         <div className="form-group row">
-          <label
-            htmlFor="registration_date"
-            className="col-sm-2 col-form-label"
-          >
-            Registration Date
+          <label htmlFor="agency_name" className="col-sm-2 col-form-label">
+            Agency Name
           </label>
           <div class="col-sm-10">
             <input
               style={{
                 width: "50%",
               }}
-              value={registationDate}
+              value={agencyName}
               type="text"
               className="form-control"
-              readonly
+              placeholder="Enter agency ID"
+              onChange={(e) => setAgencyName(e.target.value)}
+              required
             />
           </div>
         </div>
         <div className="form-group row">
-          <label htmlFor="registered_by" className="col-sm-2 col-form-label">
-            Registration by Worker
+          <label htmlFor="owner_name" className="col-sm-2 col-form-label">
+            Owner Name
           </label>
           <div class="col-sm-10">
             <input
               style={{
                 width: "50%",
               }}
-              value={registeredBy}
+              value={ownerName}
               type="text"
               className="form-control"
-              readonly
+              placeholder="Enter agency ID"
+              onChange={(e) => setOwnerName(e.target.value)}
+              required
             />
           </div>
         </div>
         <div className="form-group row">
-          <label
-            htmlFor="worker_mobile_number"
-            className="col-sm-2 col-form-label"
-          >
-            Worker Mobile Number
+          <label htmlFor="mobile" className="col-sm-2 col-form-label">
+            Mobile
           </label>
           <div class="col-sm-10">
             <input
               style={{
                 width: "50%",
               }}
-              value={workerMobile}
+              value={mobile}
+              type="number"
+              className="form-control"
+              placeholder="Enter mobile number"
+              onChange={(e) => setMobile(e.target.value)}
+              pattern="^[6789]\d{9}$"
+              required
+            />
+          </div>
+        </div>
+        <div className="form-group row">
+          <label htmlFor="password" className="col-sm-2 col-form-label">
+            Password
+          </label>
+          <div class="col-sm-10">
+            <input
+              style={{
+                width: "50%",
+              }}
+              value={password}
               type="text"
               className="form-control"
-              readonly
+              onChange={(e) => setPassword(e.target.value)}
+              minLength="6"
+              maxLength="15"
             />
           </div>
         </div>

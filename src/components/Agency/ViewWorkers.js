@@ -1,3 +1,4 @@
+import { Button } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import axios from "axios";
 import MUIDataTable from "mui-datatables";
@@ -8,14 +9,44 @@ import decodeToken from "../../services/token";
 import NavbarComponent from "../shared/Navbar";
 import NotificationComponent from "../shared/Notification";
 
-export default function ViewWorkersComponent() {
+export default function ViewWorkersComponent(props) {
+  const { history } = props;
   const [workers, setWorkers] = useState([]);
   const [openNotify, setOpenNotify] = useState(false);
   const [message, setMessage] = useState("");
   const [notificationType, setNotificationType] = useState("info");
   const [decodedToken, setDecodedToken] = useState([]);
 
-  const columns = ["Name", "Mobile"];
+  const columns = [
+    "Name",
+    "Mobile",
+    {
+      name: "",
+      options: {
+        filter: false,
+        sort: false,
+        empty: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <Button
+              color="primary"
+              onClick={() => {
+                history.push({
+                  pathname: "/agency/home/worker/edit",
+                  state: {
+                    name: tableMeta.rowData[0],
+                    mobile: tableMeta.rowData[1],
+                  },
+                });
+              }}
+            >
+              Edit
+            </Button>
+          );
+        },
+      },
+    },
+  ];
 
   const options = {
     filterType: "checkbox",

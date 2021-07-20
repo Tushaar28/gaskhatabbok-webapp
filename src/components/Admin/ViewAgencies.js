@@ -2,12 +2,14 @@ import Paper from "@material-ui/core/Paper";
 import axios from "axios";
 import MUIDataTable from "mui-datatables";
 import React, { useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
 
 import API_URL from "../../services/api";
 import decodeToken from "../../services/token";
 import NotificationComponent from "../shared/Notification";
 
-export default function ViewAgenciesComponent() {
+export default function ViewAgenciesComponent(props) {
+  const { history } = props;
   const [agencies, setAgencies] = useState([]);
   const [openNotify, setOpenNotify] = useState(false);
   const [message, setMessage] = useState("");
@@ -19,6 +21,34 @@ export default function ViewAgenciesComponent() {
     "Agency Name",
     "Owner Name",
     "Mobile",
+    {
+      name: "",
+      options: {
+        filter: false,
+        sort: false,
+        empty: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <Button
+              color="primary"
+              onClick={() => {
+                history.push({
+                  pathname: "/admin/home/agency/edit",
+                  state: {
+                    agency_id: tableMeta.rowData[0],
+                    agency_name: tableMeta.rowData[1],
+                    owner_name: tableMeta.rowData[2],
+                    mobile: tableMeta.rowData[3],
+                  },
+                });
+              }}
+            >
+              Edit
+            </Button>
+          );
+        },
+      },
+    },
   ];
 
   const options = {

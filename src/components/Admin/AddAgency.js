@@ -1,3 +1,5 @@
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -27,11 +29,17 @@ export default function AddAgencyComponent(props) {
 
   const cancel = (event) => {
     event.preventDefault();
-    props.history.replace('/admin/home');
-  }
+    props.history.replace("/admin/home");
+  };
 
   const validate = () => {
-      return agencyName.length > 0 && ownerName.length > 0 && agencyId.length > 0 && password.length >= 6 && mobile.length === 10;
+    return (
+      agencyName.length > 0 &&
+      ownerName.length > 0 &&
+      agencyId.length > 0 &&
+      password.length >= 6 &&
+      mobile.length === 10
+    );
   };
 
   const submit = async (event) => {
@@ -152,18 +160,20 @@ export default function AddAgencyComponent(props) {
             Password
           </label>
           <div class="col-sm-10">
-            <input
-              style={{
-                width: "50%",
-              }}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              type="text"
-              className="form-control"
-              placeholder="Enter password"
-              minLength='6'
-              required
-            />
+            <span>
+              <input
+                style={{
+                  width: "50%",
+                }}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="text"
+                className="form-control"
+                placeholder="Enter password"
+                minLength="6"
+                required
+              />
+            </span>
           </div>
         </div>
         <div className="form-group row">
@@ -181,8 +191,8 @@ export default function AddAgencyComponent(props) {
               pattern="^[6789]\d{9}$"
               className="form-control"
               placeholder="Enter mobile number"
-              minLength='10'
-              maxLength='10'
+              minLength="10"
+              maxLength="10"
               required
             />
           </div>
@@ -195,7 +205,11 @@ export default function AddAgencyComponent(props) {
           Submit
         </button>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <button type="cancel" className="btn btn-danger" onClick={(e) => cancel(e)}>
+        <button
+          type="cancel"
+          className="btn btn-danger"
+          onClick={(e) => cancel(e)}
+        >
           Cancel
         </button>
       </form>

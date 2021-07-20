@@ -7,7 +7,7 @@ const NavbarComponent = (props) => {
 
   const logout = () => {
     localStorage.removeItem('token');
-    // props.history.push('/');
+    // props.history.replace('/');
   }
   
     return (
